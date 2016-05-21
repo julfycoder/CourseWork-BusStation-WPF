@@ -13,5 +13,7 @@ D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\FlightsPreviewPage.g.cs
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Windows\MainWindow.baml
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Windows\MainWindow.g.cs
-D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\CourseWork(BusStation)WPF_MarkupCompile.lref
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\CourseWork(BusStation)WPF.csprojResolveAssemblyReference.cache
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\TicketReservationPage.baml
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\TicketReservationPage.g.cs

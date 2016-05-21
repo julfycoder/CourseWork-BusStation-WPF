@@ -12,18 +12,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CourseWork_BusStation_WPF.ViewModel;
+using System.Data;
 
-namespace CourseWork_BusStation_WPF
+namespace CourseWork_BusStation_WPF.View.Pages
 {
     /// <summary>
-    /// Interaction logic for MainPage.xaml
+    /// Interaction logic for TicketReservationPage.xaml
     /// </summary>
-    public partial class MainPage : Page
+    public partial class TicketReservationPage : Page
     {
-        public MainPage()
+        public TicketReservationPage(DataRow row)
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel(this);
+            this.DataContext = new TicketReservationViewModel(this, row);
         }
     }
 }

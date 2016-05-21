@@ -14,13 +14,13 @@ namespace CourseWork_BusStation_WPF
     /// </summary>
     public partial class App : Application
     {
-        public App()
-        {
-            var window = new MainWindow()
-            {
-                DataContext = new MainViewModel()
-            };
-            window.Show();
-        }
+        //public App()
+        //{
+        //    var window = new MainWindow()
+        //    {
+        //        DataContext = new MainViewModel()
+        //    };
+        //    window.Show();
+        //}
     }
 }

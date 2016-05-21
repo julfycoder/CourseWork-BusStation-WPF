@@ -1,0 +1,22 @@
+﻿<Page x:Class="CourseWork_BusStation_WPF.View.Pages.TicketReservationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="340" d:DesignWidth="631"
+	Title="TicketReservationPage">
+
+    <Grid>
+        <Label Content="Имя" Height="28" HorizontalAlignment="Left" Margin="142,80,0,0" Name="NameLabel" VerticalAlignment="Top" />
+        <Label Content="Фамилия" Height="28" HorizontalAlignment="Left" Margin="142,127,0,0" Name="SurnameLabel" VerticalAlignment="Top" />
+        <Label Content="Отчество" Height="28" HorizontalAlignment="Left" Margin="142,175,0,0" Name="PatronymicLabel" VerticalAlignment="Top" />
+        <Label Content="Национальность" Height="28" HorizontalAlignment="Left" Margin="142,227,0,0" Name="NationalityLabel" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="297,80,0,0" Name="NameTextBox" VerticalAlignment="Top" Width="120" Text="{Binding Path=PassengerName,Mode=OneWayToSource}"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="297,127,0,0" Name="SurnameTextBox" VerticalAlignment="Top" Width="120" Text="{Binding Path=PassengerSurname,Mode=OneWayToSource}"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="297,175,0,0" Name="PatronymicTextBox" VerticalAlignment="Top" Width="120" Text="{Binding Path=PassengerPatronymic,Mode=OneWayToSource}"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="297,227,0,0" Name="NationalityTextBox" VerticalAlignment="Top" Width="120" Text="{Binding Path=PassengerNationality,Mode=OneWayToSource}"/>
+        <Button Content="Бронировать" HorizontalAlignment="Left" Margin="375,292,0,25" Name="ReservationButton" Width="104" Command="{Binding Path=ReserveTicketCommand}"/>
+        <Button Content="Вернуться к рейсам" Height="23" Margin="68,26,429,0" Name="BackToFlightPreviewButton" VerticalAlignment="Top" Command="{Binding Path=BackToFlightPreviewCommand}"/>
+    </Grid>
+</Page>

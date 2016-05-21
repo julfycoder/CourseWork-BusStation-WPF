@@ -88,52 +88,15 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
             return "UPDATE " + table + " " + setQuery;
         }
 
-        /// <summary>
-        /// BETWEEN
-        /// </summary>
-        /// <param name="column"></param>
-        /// <param name="operation"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string WhereIntervalQuery(string column, object value1, object value2, bool Outside = false)
+        public static string WhereQuery(params string[] conditions)
         {
-            string query = "";
-            if (!Outside) query = " WHERE " + column + " BETWEEN ";
-            else query = " WHERE " + column + " NOT BETWEEN ";
-            switch (value1.GetType().ToString())
+            string query = " WHERE ";
+            foreach (string condition in conditions)
             {
-                case "System.String": query += "'" + value1 + "'"; break;
-                case "System.Int32": query += value1; break;
-            }
-            query += " AND ";
-            switch (value2.GetType().ToString())
-            {
-                case "System.String": query += "'" + value2 + "'"; break;
-                case "System.Int32": query += value2; break;
+                if (condition != conditions[0]) query += " AND ";
+                query += condition;
             }
             return query;
-        }
-        public static string WhereSelectionQuery(string column, bool without, params object[] values)
-        {
-            string query = "";
-            if (!without) query = " WHERE " + column + " IN(";
-            else query = " WHERE " + column + " NOT IN(";
-            foreach (object value in values)
-            {
-                switch (value.GetType().ToString())
-                {
-                    case "System.String": query += "'" + value + "'"; break;
-                    case "System.Int32": query += value; break;
-                }
-                if (value != values[values.Length - 1]) query += ", ";
-                else query += ") ";
-            }
-            return query;
-        }
-        public static string WhereNULLQuery(string column, bool isNULL = true)
-        {
-            if (isNULL) return " WHERE " + column + " IS NULL";
-            return " WHERE " + column + " IS NOT NULL";
         }
         /// <summary>
         /// 
@@ -143,15 +106,56 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
         /// <param name="operation">such as '>', "=", "!=", ...</param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string WhereQuery(string column, string operation, object value)
+        public static string SimpleCondition(string column, string operation, object value)
         {
-            string query = " WHERE " + column + " " + operation + " ";
+            string condition = column + " " + operation + " ";
             switch (value.GetType().ToString())
             {
-                case "System.String": query += "'" + value + "'"; break;
-                case "System.Int32": query += value; break;
+                case "System.String": condition += "'" + value + "'"; break;
+                case "System.Int32": condition += value; break;
+                default: condition += value.ToString(); break;
             }
-            return query;
+            return condition;
+        }
+        public static string IntervalCondition(string column, object value1, object value2, bool Outside = false)
+        {
+            string condition = "";
+            if (!Outside) condition += column + " BETWEEN ";
+            else condition = column + " NOT BETWEEN ";
+            switch (value1.GetType().ToString())
+            {
+                case "System.String": condition += "'" + value1 + "'"; break;
+                case "System.Int32": condition += value1; break;
+            }
+            condition += " AND ";
+            switch (value2.GetType().ToString())
+            {
+                case "System.String": condition += "'" + value2 + "'"; break;
+                case "System.Int32": condition += value2; break;
+            }
+            return condition;
+        }
+        public static string SelectionCondition(string column, bool without, params object[] values)
+        {
+            string condition = "";
+            if (!without) condition = column + " IN(";
+            else condition = " WHERE " + column + " NOT IN(";
+            foreach (object value in values)
+            {
+                switch (value.GetType().ToString())
+                {
+                    case "System.String": condition += "'" + value + "'"; break;
+                    case "System.Int32": condition += value; break;
+                }
+                if (value != values[values.Length - 1]) condition += ", ";
+                else condition += ") ";
+            }
+            return condition;
+        }
+        public static string NULLCondition(string column, bool isNULL = true)
+        {
+            if (isNULL) return column + " IS NULL";
+            return column + " IS NOT NULL";
         }
     }
 }

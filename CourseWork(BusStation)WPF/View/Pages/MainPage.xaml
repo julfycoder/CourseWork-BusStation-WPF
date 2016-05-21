@@ -12,6 +12,6 @@
         <TextBox Margin="145,152,166,125" Name="textBox1" />
         <TextBox Margin="145,181,166,96" Name="textBox2" />
         <Button Content="Вход" Margin="200,210,200,67" Name="EnterButton" />
-        <Button Content="Войти как гость" Margin="388,12,12,265" Name="EnterLikeAGuest" Click="EnterLikeAGuest_Click" />
+        <Button Content="Войти как гость" Margin="388,12,12,265" Name="EnterLikeAGuest" Command="{Binding Path=EnterLikeAGuestCommand}"/>
     </Grid>
 </Page>

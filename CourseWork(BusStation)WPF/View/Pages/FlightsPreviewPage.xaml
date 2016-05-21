@@ -7,20 +7,18 @@
       mc:Ignorable="d" 
       d:DesignHeight="503" d:DesignWidth="946"
 	Title="FlightsPreviewPage">
-    <Page.Resources>
-        <fpvm:FlightsPreviewViewModel x:Key="flightsPreview"/>
-    </Page.Resources>
-    <Grid DataContext="{StaticResource flightsPreview}">
-        <Button Content="Вернуться в главное меню" Margin="12,12,675,462" Name="BackToMainMenuButton" MinWidth="160" Click="BackToMainMenuButton_Click" />
-        <DataGrid AutoGenerateColumns="True" Margin="12,183,12,104" Name="FlightGrid" ItemsSource="{Binding Path=FlightsTable,Mode=TwoWay}" HorizontalScrollBarVisibility="Auto" />
-        <ListBox Height="26" HorizontalAlignment="Left" Margin="75,151,0,0" Name="DeparturePointListBox" VerticalAlignment="Top" Width="163" />
-        <Label Content="Рейсы из " Height="28" HorizontalAlignment="Left" Margin="12,151,0,0" Name="DeparturePointLabel" VerticalAlignment="Top" />
-        <ListBox Height="28" Margin="327,151,0,0" Name="DestinationListBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="153" />
-        <Label Content="Рейсы в" Height="28" HorizontalAlignment="Left" Margin="265,151,0,0" Name="DestinationLabel" VerticalAlignment="Top" Width="56" />
-        <Calendar Height="167" HorizontalAlignment="Left" Margin="509,12,0,0" Name="BeforeCalendar" VerticalAlignment="Top" Width="177" />
-        <Label Content="C" Height="28" HorizontalAlignment="Left" Margin="486,151,0,0" Name="BeforeLabel" VerticalAlignment="Top" />
-        <Label Content="До" Height="28" HorizontalAlignment="Left" Margin="692,151,0,0" Name="LaterLabel" VerticalAlignment="Top" />
-        <Calendar Height="167" Margin="723,12,47,0" Name="AfterCalendar" VerticalAlignment="Top" />
-        <Button Content="Применить фильтры" Height="32" HorizontalAlignment="Left" Margin="682,435,0,0" Name="FiltresButton" VerticalAlignment="Top" Width="132" />
+    
+    <Grid>
+        <Button Content="Вернуться в главное меню" Margin="12,12,675,462" Name="BackToMainMenuButton" MinWidth="160" Command="{Binding Path=BackToMainMenuCommand}"/>
+        <DataGrid AutoGenerateColumns="True" Margin="12,183,12,104" Name="FlightGrid" ItemsSource="{Binding Path=FlightsTable,Mode=TwoWay}" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" SelectedIndex="{Binding Path=SelectedIndex,Mode=OneWayToSource}"/>
+        <ListBox Height="75" HorizontalAlignment="Left" Margin="75,102,0,0" Name="Departure_PlacesListBox" VerticalAlignment="Top" Width="163" ItemsSource="{Binding Path=Departure_PlacesList, Mode=TwoWay}" SelectedItem="{Binding Path=Departure_Place,Mode=TwoWay}" />
+        <Label Content="Рейсы из " Height="28" HorizontalAlignment="Left" Margin="12,128,0,0" Name="Departure_PlaceLabel" VerticalAlignment="Top" />
+        <ListBox Height="77" Margin="327,102,0,0" Name="Arrival_PlacesListBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="153" ItemsSource="{Binding Path=Arrival_PlacesList, Mode=TwoWay}" SelectedItem="{Binding Path=Arrival_Place,Mode=TwoWay}"/>
+        <Label Content="Рейсы в" Height="28" HorizontalAlignment="Left" Margin="265,128,0,0" Name="Arrival_PlaceLabel" VerticalAlignment="Top" Width="56" />
+        <Label Content="Дата" Height="28" HorizontalAlignment="Left" Margin="523,128,0,0" Name="BeforeLabel" VerticalAlignment="Top" />
+        <Button Content="Применить фильтры" Height="32" HorizontalAlignment="Left" Margin="571,436,0,0" Name="FiltresButton" VerticalAlignment="Top" Width="132" Command="{Binding Path=ApplyFiltresCommand}"/>
+        <Button Content="Сброс фильтров" Height="32" Margin="731,436,65,0" Name="FiltresResetButton" VerticalAlignment="Top" Command="{Binding Path=ResetFiltresCommand}"/>
+        <DatePicker Text="Выберите дату" Height="25" HorizontalAlignment="Left" Margin="619,131,0,0" Name="datePicker1" VerticalAlignment="Top" Width="115" SelectedDate="{Binding Path=Departure_date,Mode=OneWayToSource}"/>
+        <Button Content="Бронь билета" Height="32" HorizontalAlignment="Left" Margin="356,436,0,0" Name="ReservationButton" VerticalAlignment="Top" Width="172" Command="{Binding Path=ReserveCommand}"/>
     </Grid>
 </Page>

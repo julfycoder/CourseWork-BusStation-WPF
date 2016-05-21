@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace CourseWork_BusStation_WPF.Commands
 {
-    class Command:ICommand
+    class Command : ICommand
     {
         public Command(Action<object> action)
         {
@@ -22,7 +22,7 @@ namespace CourseWork_BusStation_WPF.Commands
 
         public void Execute(object parameter)
         {
-            if (ExecuteDelegate != null) Execute(parameter);
+            if (ExecuteDelegate != null) ExecuteDelegate(parameter);
         }
     }
 }
