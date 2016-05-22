@@ -9,11 +9,13 @@ using System.ComponentModel;
 using CourseWork_BusStation_WPF.Model.WorkingWithDatabase;
 using CourseWork_BusStation_WPF.View.Pages;
 using CourseWork_BusStation_WPF.Commands;
-using CourseWork_BusStation_WPF.Model;
+using CourseWork_BusStation_WPF.Model.BusStationEntity;
+using System.Reflection;
+using System.Windows;
 
 namespace CourseWork_BusStation_WPF.ViewModel
 {
-    class TicketReservationViewModel: INotifyPropertyChanged
+    class TicketReservationViewModel : INotifyPropertyChanged
     {
         DataRow flight;
         Database database;
@@ -23,7 +25,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             this.currentPage = page;
             this.flight = flight;
             BackToFlightPreviewCommand = new Command(arg => BackToFlightPreview());
-            ReserveTicketCommand = new Command(arg => ReserveTicket());
+            ApplyReservationCommand = new Command(arg => ApplyReservation());
 
             CreateModel();
         }
@@ -53,14 +55,22 @@ namespace CourseWork_BusStation_WPF.ViewModel
         {
             currentPage.NavigationService.Navigate(new FlightsPreviewPage());
         }
-        public ICommand ReserveTicketCommand { get; set; }
+        public ICommand ApplyReservationCommand { get; set; }
+        void ApplyReservation()
+        {
+            if ((PassengerSurname != null && PassengerSurname != "") && (PassengerName != null && PassengerName != "") && (PassengerPatronymic != null && PassengerPatronymic != "") && (PassengerNationality != null && PassengerNationality != ""))
+            {
+                ReserveTicket();
+                BackToFlightPreview();
+            }
+            else MessageBox.Show("Все поля должны быть заполнены!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
         void ReserveTicket()
         {
             DataTable passengerTable = new DataTable();
-            passengerTable.Columns.Add("Surname");
-            passengerTable.Columns.Add("Name");
-            passengerTable.Columns.Add("Patronymic");
-            passengerTable.Columns.Add("Nationality");
+
+            foreach (PropertyInfo property in typeof(Passenger).GetProperties()) if (property.Name != "idPassenger") passengerTable.Columns.Add(property.Name);
+
             DataRow passenger = passengerTable.NewRow();
             passenger["Surname"] = PassengerSurname;
             passenger["Name"] = PassengerName;
@@ -69,27 +79,25 @@ namespace CourseWork_BusStation_WPF.ViewModel
             database.SendQuery(MySqlQueryConstructor.InsertQuery("Passenger", passenger));
 
             Dictionary<string, object> changes = new Dictionary<string, object>();
-            changes.Add("Available_Tickets_Amount", (int)flight[flight.Table.Columns["Available_Tickets_Amount"]] - 1);
-            database.SendQuery(MySqlQueryConstructor.UpdateQuery("Flight", MySqlQueryConstructor.SetQuery(changes))+
-                MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idFlight","=",flight[flight.Table.Columns["idFlight"]])));
-
-            BackToFlightPreview();
+            changes.Add("Available_Tickets_Amount", (int)flight["Available_Tickets_Amount"] - 1);
+            database.SendQuery(MySqlQueryConstructor.UpdateQuery("Flight", MySqlQueryConstructor.SetQuery(changes)) +
+                MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idFlight", "=", flight["idFlight"])));
         }
 
         #endregion
 
         #region Properties
-
-        public string PassengerName
-        {
-            get;
-            set;
-        }
         public string PassengerSurname
         {
             get;
             set;
         }
+        public string PassengerName
+        {
+            get;
+            set;
+        }
+
         public string PassengerPatronymic
         {
             get;

@@ -21,10 +21,10 @@ namespace CourseWork_BusStation_WPF.View.Pages
     /// </summary>
     public partial class TicketReservationPage : Page
     {
-        public TicketReservationPage(DataRow row)
+        public TicketReservationPage(DataRow flight)
         {
             InitializeComponent();
-            this.DataContext = new TicketReservationViewModel(this, row);
+            this.DataContext = new TicketReservationViewModel(this, flight);
         }
     }
 }

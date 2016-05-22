@@ -7,6 +7,7 @@ using System.Data;
 using System.ComponentModel;
 using System.Windows.Input;
 using CourseWork_BusStation_WPF.Model.WorkingWithDatabase;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Controls;
 using CourseWork_BusStation_WPF.Commands;
@@ -40,6 +41,16 @@ namespace CourseWork_BusStation_WPF.ViewModel
             builder.SetPassword("");
             database = builder.BuildDatabase();
         }
+        void UpdateSelectionObservers()
+        {
+            BusInformation = "Bus:\n";
+            DataTable busTable = database.GetData(MySqlQueryConstructor.SelectQuery("Bus") + MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idBus", "=", FlightsTable.Rows[SelectedIndex]["idBus"])));
+            foreach (DataColumn column in busTable.Columns) BusInformation += column.ColumnName + ": " + busTable.Rows[0][column] + "\n";
+
+            DriverInformation = "Driver:\n";
+            DataTable driverTable = database.GetData(MySqlQueryConstructor.SelectQuery("Driver") + MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idDriver", "=", busTable.Rows[0]["idDriver"])));
+            foreach (DataColumn column in driverTable.Columns) DriverInformation += column.ColumnName + ": " + driverTable.Rows[0][column] + "\n";
+        }
 
         #region PropertyChanged
 
@@ -61,8 +72,13 @@ namespace CourseWork_BusStation_WPF.ViewModel
         public ICommand ReserveCommand { get; set; }
         void Reserve()
         {
-            DataRow row = FlightsTable.Rows[SelectedIndex];
-            currentPage.NavigationService.Navigate(new TicketReservationPage(row));
+            if (SelectedIndex != -1)
+            {
+                DataRow flight = FlightsTable.Rows[SelectedIndex];
+                if ((int)flight["Available_Tickets_Amount"] > 0) currentPage.NavigationService.Navigate(new TicketReservationPage(flight));
+                else MessageBox.Show("К сожалению на данный рейс были проданы все билеты.", "Сожаление", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else MessageBox.Show("Не выбран ни один рейс!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         public ICommand ApplyFiltresCommand { get; set; }
         void ApplyFiltres()
@@ -82,6 +98,8 @@ namespace CourseWork_BusStation_WPF.ViewModel
             Departure_Place = "Place";
             Arrival_Place = "Place";
             Departure_date = new DateTime();
+            BusInformation = "";
+            DriverInformation = "";
             ApplyFiltres();
         }
 
@@ -122,7 +140,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
 
         #endregion
 
-        #region SelectedItems
+        #region Properties
 
         string _arrival_place;
         public string Arrival_Place
@@ -156,10 +174,46 @@ namespace CourseWork_BusStation_WPF.ViewModel
             get;
             set;
         }
+
+        int _selectedIndex;
         public int SelectedIndex
         {
-            get;
-            set;
+            get
+            {
+                return _selectedIndex;
+            }
+            set
+            {
+                _selectedIndex = value;
+                if (_selectedIndex > -1) UpdateSelectionObservers();
+            }
+        }
+
+        string _busInformation;
+        public string BusInformation
+        {
+            get
+            {
+                return _busInformation;
+            }
+            set
+            {
+                _busInformation = value;
+                UpdatePropertyChanged("BusInformation");
+            }
+        }
+        string _driverInfromation;
+        public string DriverInformation
+        {
+            get
+            {
+                return _driverInfromation;
+            }
+            set
+            {
+                _driverInfromation = value;
+                UpdatePropertyChanged("DriverInformation");
+            }
         }
 
         #endregion
