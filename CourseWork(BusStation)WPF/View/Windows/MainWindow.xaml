@@ -1,5 +1,5 @@
 ﻿<NavigationWindow x:Class="CourseWork_BusStation_WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525" Source="../Pages/MainPage.xaml" SizeToContent="WidthAndHeight">
+        Title="" Height="350" Width="525" Source="../Pages/MainPage.xaml" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
 </NavigationWindow>

@@ -12,6 +12,6 @@ namespace CourseWork_BusStation_WPF.Model.BusStationEntity
         public int idFlight { get; set; }
         public int idBus { get; set; }
         public int Cost { get; set; }
-        public string Purchase_date { get; set; }
+        public DateTime Purchase_date { get; set; }
     }
 }

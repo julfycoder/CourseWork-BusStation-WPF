@@ -59,11 +59,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\Pages\AdminConsolePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Pages\FlightsPreviewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\RegistrationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -80,14 +88,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Model\AuthentificationEntity\Administrator.cs" />
+    <Compile Include="Model\BusStationAccess.cs" />
+    <Compile Include="Model\EntityBuilder.cs" />
+    <Compile Include="Model\IAccessible.cs" />
+    <Compile Include="ViewModel\AdminConsoleViewModel.cs" />
     <Compile Include="ViewModel\FlightsPreviewViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\RegistrationViewModel.cs" />
     <Compile Include="ViewModel\TicketReservationViewModel.cs" />
+    <Compile Include="View\Pages\AdminConsolePage.xaml.cs">
+      <DependentUpon>AdminConsolePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Pages\FlightsPreviewPage.xaml.cs">
       <DependentUpon>FlightsPreviewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\RegistrationPage.xaml.cs">
+      <DependentUpon>RegistrationPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\TicketReservationPage.xaml.cs">
       <DependentUpon>TicketReservationPage.xaml</DependentUpon>
@@ -100,7 +120,6 @@
   <ItemGroup>
     <Compile Include="Model\BusStationEntity\Bus.cs" />
     <Compile Include="Model\BusStationEntity\Driver.cs" />
-    <Compile Include="Model\BusStationEntity\EntityBuilder.cs" />
     <Compile Include="Model\BusStationEntity\Flight.cs" />
     <Compile Include="Model\BusStationEntity\Passenger.cs" />
     <Compile Include="Model\BusStationEntity\Ticket.cs" />

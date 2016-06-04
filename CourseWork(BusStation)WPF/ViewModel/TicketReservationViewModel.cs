@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
-using System.Data;
 using System.Windows.Controls;
 using System.ComponentModel;
-using CourseWork_BusStation_WPF.Model.WorkingWithDatabase;
 using CourseWork_BusStation_WPF.View.Pages;
 using CourseWork_BusStation_WPF.Commands;
 using CourseWork_BusStation_WPF.Model.BusStationEntity;
+using CourseWork_BusStation_WPF.Model;
 using System.Reflection;
 using System.Windows;
 
@@ -17,27 +16,17 @@ namespace CourseWork_BusStation_WPF.ViewModel
 {
     class TicketReservationViewModel : INotifyPropertyChanged
     {
-        DataRow flight;
-        Database database;
+        Flight flight;
+        IAccessible station;
         Page currentPage;
-        public TicketReservationViewModel(Page page, DataRow flight)
+        public TicketReservationViewModel(Page page, Flight flight)
         {
             this.currentPage = page;
             this.flight = flight;
             BackToFlightPreviewCommand = new Command(arg => BackToFlightPreview());
             ApplyReservationCommand = new Command(arg => ApplyReservation());
 
-            CreateModel();
-        }
-        void CreateModel()
-        {
-            DatabaseBuilder builder = new MySqlDatabaseBuilder();
-            builder.SetDatabaseName("mydb");
-            builder.SetServerAddress("127.0.0.1");
-            builder.SetPort(3306);
-            builder.SetUserName("root");
-            builder.SetPassword("");
-            database = builder.BuildDatabase();
+            station = new BusStationAccess();
         }
 
         #region PropertyChanged
@@ -67,21 +56,26 @@ namespace CourseWork_BusStation_WPF.ViewModel
         }
         void ReserveTicket()
         {
-            DataTable passengerTable = new DataTable();
+            Passenger passenger = new Passenger()
+            {
+                Surname = PassengerSurname,
+                Name = PassengerName,
+                Patronymic = PassengerPatronymic,
+                Nationality = PassengerNationality
+            };
+            station.AddEntity<Passenger>(passenger);
 
-            foreach (PropertyInfo property in typeof(Passenger).GetProperties()) if (property.Name != "idPassenger") passengerTable.Columns.Add(property.Name);
+            Ticket ticket = new Ticket()
+            {
+                idFlight = flight.idFlight,
+                idBus = flight.idBus,
+                Cost = 55,
+                idPassenger = station.GetEntitiesByPrototype<Passenger>(passenger)[0].idPassenger,
+                Purchase_date = DateTime.Now,
+            };
 
-            DataRow passenger = passengerTable.NewRow();
-            passenger["Surname"] = PassengerSurname;
-            passenger["Name"] = PassengerName;
-            passenger["Patronymic"] = PassengerPatronymic;
-            passenger["Nationality"] = PassengerNationality;
-            database.SendQuery(MySqlQueryConstructor.InsertQuery("Passenger", passenger));
-
-            Dictionary<string, object> changes = new Dictionary<string, object>();
-            changes.Add("Available_Tickets_Amount", (int)flight["Available_Tickets_Amount"] - 1);
-            database.SendQuery(MySqlQueryConstructor.UpdateQuery("Flight", MySqlQueryConstructor.SetQuery(changes)) +
-                MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idFlight", "=", flight["idFlight"])));
+            station.AddEntity<Ticket>(ticket);
+            station.ChangeEntity<Flight>(flight, new Flight() { Available_Tickets_Amount = flight.Available_Tickets_Amount - 1 });
         }
 
         #endregion

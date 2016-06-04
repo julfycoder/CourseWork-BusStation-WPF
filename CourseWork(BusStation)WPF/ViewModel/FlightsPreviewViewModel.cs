@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Data;
 using System.ComponentModel;
 using System.Windows.Input;
-using CourseWork_BusStation_WPF.Model.WorkingWithDatabase;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Controls;
+using System.Reflection;
+using CourseWork_BusStation_WPF.Model.BusStationEntity;
+using CourseWork_BusStation_WPF.Model;
 using CourseWork_BusStation_WPF.Commands;
 using CourseWork_BusStation_WPF.View.Pages;
 
@@ -18,7 +19,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
     class FlightsPreviewViewModel : INotifyPropertyChanged
     {
         Page currentPage;
-        Database database;
+        IAccessible station;
         public FlightsPreviewViewModel(Page page)
         {
             this.currentPage = page;
@@ -27,29 +28,35 @@ namespace CourseWork_BusStation_WPF.ViewModel
             ResetFiltresCommand = new Command(arg => ResetFiltres());
             ReserveCommand = new Command(arg => Reserve());
 
-            CreateModel();
-            _flightsTable = database.GetData(MySqlQueryConstructor.SelectQuery("Flight"));
+            station = new BusStationAccess();
+            _flights = new ObservableCollection<Flight>(station.GetEntities<Flight>());
         }
 
-        void CreateModel()
-        {
-            DatabaseBuilder builder = new MySqlDatabaseBuilder();
-            builder.SetDatabaseName("mydb");
-            builder.SetServerAddress("127.0.0.1");
-            builder.SetPort(3306);
-            builder.SetUserName("root");
-            builder.SetPassword("");
-            database = builder.BuildDatabase();
-        }
+
         void UpdateSelectionObservers()
         {
             BusInformation = "Bus:\n";
-            DataTable busTable = database.GetData(MySqlQueryConstructor.SelectQuery("Bus") + MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idBus", "=", FlightsTable.Rows[SelectedIndex]["idBus"])));
-            foreach (DataColumn column in busTable.Columns) BusInformation += column.ColumnName + ": " + busTable.Rows[0][column] + "\n";
+            List<Bus> buses = station.GetEntitiesByPrototype<Bus>(new Bus() { idBus = Flights[SelectedIndex].idBus });
+            foreach (Bus bus in buses)
+            {
+                foreach (PropertyInfo property in bus.GetType().GetProperties())
+                {
+                    BusInformation += property.Name + ": " + property.GetValue(bus, null) + "\n";
+                }
+            }
 
             DriverInformation = "Driver:\n";
-            DataTable driverTable = database.GetData(MySqlQueryConstructor.SelectQuery("Driver") + MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition("idDriver", "=", busTable.Rows[0]["idDriver"])));
-            foreach (DataColumn column in driverTable.Columns) DriverInformation += column.ColumnName + ": " + driverTable.Rows[0][column] + "\n";
+            List<Driver> drivers = station.GetEntitiesByPrototype<Driver>(new Driver()
+            {
+                idDriver = buses.ToList<Bus>().Find(bus => bus.idBus == Flights[SelectedIndex].idBus).idDriver
+            });
+            foreach (Driver driver in drivers)
+            {
+                foreach (PropertyInfo property in driver.GetType().GetProperties())
+                {
+                    BusInformation += property.Name + ": " + property.GetValue(driver, null) + "\n";
+                }
+            }
         }
 
         #region PropertyChanged
@@ -74,8 +81,8 @@ namespace CourseWork_BusStation_WPF.ViewModel
         {
             if (SelectedIndex != -1)
             {
-                DataRow flight = FlightsTable.Rows[SelectedIndex];
-                if ((int)flight["Available_Tickets_Amount"] > 0) currentPage.NavigationService.Navigate(new TicketReservationPage(flight));
+                Flight flight = Flights[SelectedIndex];
+                if (flight.Available_Tickets_Amount > 0) currentPage.NavigationService.Navigate(new TicketReservationPage(flight));
                 else MessageBox.Show("К сожалению на данный рейс были проданы все билеты.", "Сожаление", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else MessageBox.Show("Не выбран ни один рейс!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -83,14 +90,26 @@ namespace CourseWork_BusStation_WPF.ViewModel
         public ICommand ApplyFiltresCommand { get; set; }
         void ApplyFiltres()
         {
-            string query = MySqlQueryConstructor.SelectQuery("Flight");
+            Flight flight = new Flight();
             List<string> conditions = new List<string>();
-            if (Departure_Place != null && Departure_Place != Departure_PlacesList[0]) conditions.Add(MySqlQueryConstructor.SimpleCondition("Departure_Place", "=", Departure_Place));
-            if (Arrival_Place != null && Arrival_Place != Arrival_PlacesList[0]) conditions.Add(MySqlQueryConstructor.SimpleCondition("Arrival_Place", "=", Arrival_Place));
-            if (Departure_date != null && (Departure_date.Year != 1)) conditions.Add(MySqlQueryConstructor.SimpleCondition(
-                              "Departure_date", "=", Departure_date.Year.ToString() + "-" + Departure_date.Month.ToString() + "-" + Departure_date.Day.ToString()));
-            if (conditions.Count > 0) query += MySqlQueryConstructor.WhereQuery(conditions.ToArray());
-            FlightsTable = database.GetData(query);
+            int count = 0;
+            if (Departure_Place != null && Departure_Place != Departure_PlacesList[0])
+            {
+                flight.Departure_place = Departure_Place;
+                count++;
+            }
+            if (Arrival_Place != null && Arrival_Place != Arrival_PlacesList[0])
+            {
+                flight.Arrival_Place = Arrival_Place;
+                count++;
+            }
+            if (Departure_date != null && (Departure_date.Year != 1))
+            {
+                flight.Departure_date = Departure_date;
+                count++;
+            }
+            if (count > 0) Flights = new ObservableCollection<Flight>(station.GetEntitiesByPrototype<Flight>(flight));
+            else Flights = new ObservableCollection<Flight>(station.GetEntities<Flight>());
         }
         public ICommand ResetFiltresCommand { get; set; }
         void ResetFiltres()
@@ -114,7 +133,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             {
                 _departure_placesList = new ObservableCollection<string>();
                 _departure_placesList.Add("Place");
-                foreach (DataRow row in FlightsTable.Rows) _departure_placesList.Add(row[FlightsTable.Columns["Departure_Place"]].ToString());
+                foreach (Flight flight in Flights) _departure_placesList.Add(flight.Departure_place);
                 return _departure_placesList;
             }
             set
@@ -122,19 +141,19 @@ namespace CourseWork_BusStation_WPF.ViewModel
                 _departure_placesList = value;
             }
         }
-        ObservableCollection<string> _arriva_placeslList;
+        ObservableCollection<string> _arrival_placeslList;
         public ObservableCollection<string> Arrival_PlacesList
         {
             get
             {
-                _arriva_placeslList = new ObservableCollection<string>();
-                _arriva_placeslList.Add("Place");
-                foreach (DataRow row in FlightsTable.Rows) _arriva_placeslList.Add(row[FlightsTable.Columns["Arrival_Place"]].ToString());
-                return _arriva_placeslList;
+                _arrival_placeslList = new ObservableCollection<string>();
+                _arrival_placeslList.Add("Place");
+                foreach (Flight flight in Flights) _arrival_placeslList.Add(flight.Arrival_Place);
+                return _arrival_placeslList;
             }
             set
             {
-                _arriva_placeslList = value;
+                _arrival_placeslList = value;
             }
         }
 
@@ -220,13 +239,16 @@ namespace CourseWork_BusStation_WPF.ViewModel
 
         #region FlightTable
 
-        DataTable _flightsTable;
-        public DataTable FlightsTable
+        ObservableCollection<Flight> _flights;
+        public ObservableCollection<Flight> Flights
         {
-            get { return _flightsTable; }
+            get
+            { 
+                return _flights; 
+            }
             set
             {
-                _flightsTable = value;
+                _flights = value;
                 UpdatePropertyChanged("FlightsTable");
             }
         }

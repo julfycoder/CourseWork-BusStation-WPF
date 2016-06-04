@@ -16,7 +16,7 @@
         <Label Content="Рейсы в" Height="28" HorizontalAlignment="Left" Margin="265,102,0,0" Name="Arrival_PlaceLabel" VerticalAlignment="Top" Width="56" />
         <Label Content="Дата" Height="28" HorizontalAlignment="Left" Margin="531,102,0,0" Name="BeforeLabel" VerticalAlignment="Top" />
         <Button Content="Применить фильтры" Height="32" HorizontalAlignment="Left" Margin="784,68,0,0" Name="FiltresButton" VerticalAlignment="Top" Width="150" Command="{Binding Path=ApplyFiltresCommand}"/>
-        <Button Content="Сброс фильтров" Height="32" Margin="784,111,12,0" Name="FiltresResetButton" VerticalAlignment="Top" Command="{Binding Path=ResetFiltresCommand}"/>
+        <Button Content="Сброс фильтров" Height="32" Margin="784,111,0,0" Name="FiltresResetButton" VerticalAlignment="Top" Command="{Binding Path=ResetFiltresCommand}" HorizontalAlignment="Left" Width="150" />
         <DatePicker Text="Выберите дату" Height="25" HorizontalAlignment="Left" Margin="571,105,0,0" Name="datePicker1" VerticalAlignment="Top" Width="115" SelectedDate="{Binding Path=Departure_date,Mode=OneWayToSource}"/>
         <Button Content="Забронировать билет" HorizontalAlignment="Left" Margin="784,357,0,137" Name="ReservationButton" Width="150" Command="{Binding Path=ReserveCommand}"/>
         <TextBox Height="165" HorizontalAlignment="Left" Margin="12,349,0,0" Name="BusInformationTextBox" VerticalAlignment="Top" Width="213" IsReadOnly="True" BorderBrush="#00000000" Text="{Binding Path=BusInformation,Mode=OneWay}"/>

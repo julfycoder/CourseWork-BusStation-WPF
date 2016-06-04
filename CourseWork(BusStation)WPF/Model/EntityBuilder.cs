@@ -15,6 +15,7 @@ namespace CourseWork_BusStation_WPF.Model.BusStationEntity
         }
         public void SetEntityProperty(string propertyName, object value)
         {
+            string propName = propertyName;
             PropertyInfo property = entity.GetType().GetProperty(propertyName);
             if (value == DBNull.Value) value = null;
             property.SetValue(entity, value, null);

@@ -1,0 +1,22 @@
+﻿<Page x:Class="CourseWork_BusStation_WPF.View.Pages.RegistrationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="347" d:DesignWidth="523" MinWidth="520" MinHeight="345"
+	Title="RegistrationPage">
+
+    <Grid>
+        <Button Content="Выйти в главное меню" Height="27" HorizontalAlignment="Left" Margin="12,11,0,0" Name="button1" VerticalAlignment="Top" Width="234" Command="{Binding Path=BackToMainMenuCommand}"/>
+        <TextBox Height="23" Margin="184,105,0,0" Name="SurnameTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156" Text="{Binding Path=Surname,Mode=OneWayToSource}"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="184,150,0,0" Name="NameTextBox" VerticalAlignment="Top" Width="156" Text="{Binding Path=Name,Mode=OneWayToSource}"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="184,194,0,0" Name="LoginTextBox" VerticalAlignment="Top" Width="156" Text="{Binding Path=Login,Mode=OneWayToSource}"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="184,243,0,0" Name="PasswordTextBox" VerticalAlignment="Top" Width="156" Text="{Binding Path=Password,Mode=OneWayToSource}"/>
+        <Button Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="184,304,0,0" Name="button2" Width="156" Height="23" VerticalAlignment="Top" Command="{Binding Path=ApplyRegistrationCommand}"/>
+        <Label Content="Фамилия:" Height="23" HorizontalAlignment="Left" Margin="82,105,0,0" Name="SurnameLabel" VerticalAlignment="Top" />
+        <Label Content="Имя:" Height="23" HorizontalAlignment="Left" Margin="82,150,0,0" Name="NameLabel" VerticalAlignment="Top" />
+        <Label Content="Логин:" Height="23" HorizontalAlignment="Left" Margin="82,194,0,0" Name="LoginLabel" VerticalAlignment="Top" />
+        <Label Content="Пароль:" Height="23" HorizontalAlignment="Left" Margin="82,243,0,0" Name="PasswordLabel" VerticalAlignment="Top" />
+    </Grid>
+</Page>

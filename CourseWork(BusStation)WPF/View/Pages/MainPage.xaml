@@ -4,14 +4,17 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="500"
+      d:DesignHeight="300" d:DesignWidth="500" MinHeight="300" MinWidth="500"
 	Title="MainPage" ShowsNavigationUI="False">
     <Grid>
-        <Label Content="ДОБРО ПОЖАЛОВАТЬ ТРАТАТА" Margin="145,42,169,230" Name="label1" />
-        <Label Content="Авторизация администратора:" Margin="145,118,177,154" Name="label2" />
-        <TextBox Margin="145,152,166,125" Name="textBox1" />
-        <TextBox Margin="145,181,166,96" Name="textBox2" />
-        <Button Content="Вход" Margin="200,210,200,67" Name="EnterButton" />
-        <Button Content="Войти как гость" Margin="388,12,12,265" Name="EnterLikeAGuest" Command="{Binding Path=EnterLikeAGuestCommand}"/>
+        <Label Content="ДОБРО ПОЖАЛОВАТЬ" Margin="145,42,0,0" Name="label1" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="186" />
+        <Label Content="Авторизация администратора:" Margin="145,118,0,0" Name="label2" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="178" />
+        <TextBox Margin="145,152,0,0" Name="LoginTextBox" HorizontalAlignment="Left" Width="189" Height="23" VerticalAlignment="Top" Text="{Binding Path=Login, Mode=OneWayToSource}"/>
+        <TextBox Margin="145,181,0,0" Name="PasswordTextBox" HorizontalAlignment="Left" Width="189" Height="23" VerticalAlignment="Top" Text="{Binding Path=Password,Mode=OneWayToSource}"/>
+        <Button Content="Вход" Margin="200,210,0,0" Name="EnterLikeAnAdminButton" Command="{Binding Path=EnterLikeAnAdminCommand}" HorizontalAlignment="Left" Width="100" Height="23" VerticalAlignment="Top" />
+        <Button Content="Войти как гость" Margin="388,12,0,0" Name="EnterLikeAGuest" Command="{Binding Path=EnterLikeAGuestCommand}" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" />
+        <Button Content="Зарегистрироваться" Height="23" HorizontalAlignment="Left" Margin="347,265,0,0" Name="button1" VerticalAlignment="Top" Width="141" Command="{Binding Path=RegistrationCommand}"/>
+        <Label Content="Логин" Height="23" HorizontalAlignment="Left" Margin="36,152,0,0" Name="LoginLabel" VerticalAlignment="Top" />
+        <Label Content="Пароль" Height="23" HorizontalAlignment="Left" Margin="36,181,0,0" Name="PasswordLabel" VerticalAlignment="Top" />
     </Grid>
 </Page>

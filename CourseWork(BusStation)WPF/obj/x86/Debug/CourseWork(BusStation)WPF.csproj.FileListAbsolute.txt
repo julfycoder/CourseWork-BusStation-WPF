@@ -16,3 +16,9 @@ D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\CourseWork(BusStation)WPF.csprojResolveAssemblyReference.cache
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\TicketReservationPage.baml
 D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\TicketReservationPage.g.cs
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\AdminConsolePage.baml
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\AdminConsolePage.g.cs
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\RegistrationPage.baml
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Pages\RegistrationPage.g.cs
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Windows\AlterTableWindow.baml
+D:\Windows.old.001\Users\Bogdan\Documents\Visual Studio 2010\Projects\CourseWork(BusStation)WPF\CourseWork(BusStation)WPF\obj\x86\Debug\View\Windows\AlterTableWindow.g.cs

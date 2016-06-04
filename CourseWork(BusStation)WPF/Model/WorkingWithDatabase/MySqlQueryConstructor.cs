@@ -28,6 +28,7 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
                 {
                     case "System.String": queryString += "'" + row[column].ToString() + "'"; break;
                     case "System.Int32": queryString += row[column].ToString(); break;
+                    case "System.DateTime": queryString += "'" + ((DateTime)row[column]).Year.ToString() + "-" + ((DateTime)row[column]).Month.ToString() + "-" + ((DateTime)row[column]).Day.ToString() + "'"; break;
                 }
                 if (column != row.Table.Columns[row.Table.Columns.Count - 1]) queryString += ", ";
                 else queryString += ")";
@@ -76,6 +77,7 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
                     {
                         case "System.String": query += "'" + change[key] + "'"; break;
                         case "System.Int32": query += change[key].ToString(); break;
+                        case "System.DateTime": query += "'" + ((DateTime)change[key]).Year.ToString() + "-" + ((DateTime)change[key]).Month.ToString() + "-" + ((DateTime)change[key]).Day.ToString() + "'"; break;
                     }
                     if (change != changes[changes.Length - 1]) query += ", ";
                 }
@@ -113,6 +115,7 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
             {
                 case "System.String": condition += "'" + value + "'"; break;
                 case "System.Int32": condition += value; break;
+                case "System.DateTime": condition += "'" + ((DateTime)value).Year.ToString() + "-" + ((DateTime)value).Month.ToString() + "-" + ((DateTime)value).Day.ToString() + "'"; break;
                 default: condition += value.ToString(); break;
             }
             return condition;
@@ -126,12 +129,14 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
             {
                 case "System.String": condition += "'" + value1 + "'"; break;
                 case "System.Int32": condition += value1; break;
+                case "System.DateTime": condition += "'" + ((DateTime)value1).Year.ToString() + "-" + ((DateTime)value1).Month.ToString() + "-" + ((DateTime)value1).Day.ToString() + "'"; break;
             }
             condition += " AND ";
             switch (value2.GetType().ToString())
             {
                 case "System.String": condition += "'" + value2 + "'"; break;
                 case "System.Int32": condition += value2; break;
+                case "System.DateTime": condition += "'" + ((DateTime)value2).Year.ToString() + "-" + ((DateTime)value2).Month.ToString() + "-" + ((DateTime)value2).Day.ToString() + "'"; break;
             }
             return condition;
         }
@@ -146,6 +151,7 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
                 {
                     case "System.String": condition += "'" + value + "'"; break;
                     case "System.Int32": condition += value; break;
+                    case "System.DateTime": condition += "'" + ((DateTime)value).Year.ToString() + "-" + ((DateTime)value).Month.ToString() + "-" + ((DateTime)value).Day.ToString() + "'"; break;
                 }
                 if (value != values[values.Length - 1]) condition += ", ";
                 else condition += ") ";
