@@ -54,7 +54,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             {
                 foreach (PropertyInfo property in driver.GetType().GetProperties())
                 {
-                    BusInformation += property.Name + ": " + property.GetValue(driver, null) + "\n";
+                    DriverInformation += property.Name + ": " + property.GetValue(driver, null) + "\n";
                 }
             }
         }
@@ -237,9 +237,9 @@ namespace CourseWork_BusStation_WPF.ViewModel
 
         #endregion
 
-        #region FlightTable
+        #region Flights
 
-        ObservableCollection<Flight> _flights;
+        ObservableCollection<Flight> _flights = new ObservableCollection<Flight>();
         public ObservableCollection<Flight> Flights
         {
             get
@@ -249,7 +249,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             set
             {
                 _flights = value;
-                UpdatePropertyChanged("FlightsTable");
+                UpdatePropertyChanged("Flights");
             }
         }
 

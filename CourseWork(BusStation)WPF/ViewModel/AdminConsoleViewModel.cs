@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using CourseWork_BusStation_WPF.Model;
 using System.Collections.ObjectModel;
 using CourseWork_BusStation_WPF.Model.BusStationEntity;
+using System.Reflection;
+using System.Linq;
 using System.Windows;
 
 namespace CourseWork_BusStation_WPF.ViewModel
@@ -27,10 +29,44 @@ namespace CourseWork_BusStation_WPF.ViewModel
             _drivers = new ObservableCollection<Driver>(station.GetEntities<Driver>());
             _passengers = new ObservableCollection<Passenger>(station.GetEntities<Passenger>());
         }
-
-        ObservableCollection<T> UpdateEntities<T>()
+        void UpdateCollection<T>(ObservableCollection<T> collection)
         {
-            return new ObservableCollection<T>(station.GetEntities<T>());
+            ObservableCollection<T> newCollection = new ObservableCollection<T>(station.GetEntities<T>());
+            collection.Clear();
+            foreach (T element in newCollection)
+            {
+                collection.Add(element);
+            }
+        }
+        void ChangesAdding<T>(ObservableCollection<T> collection)
+        {
+            ObservableCollection<T> oldEntities = new ObservableCollection<T>(station.GetEntities<T>());
+            if (collection.Count > oldEntities.Count)
+            {
+                for (int i = 0; i < collection.Count - oldEntities.Count; i++)
+                {
+                    station.AddEntity<T>(collection[oldEntities.Count + i]);
+                }
+                return;
+            }
+            foreach (T entity in collection)
+            {
+                T temp = Activator.CreateInstance<T>();
+                temp.GetType().GetProperties()[0].SetValue(temp, -1, null);
+                T oldEntity = oldEntities.ToList<T>().Find(e => e.GetType().GetProperties()[0].GetValue(e, null).Equals(entity.GetType().GetProperties()[0].GetValue(entity, null)));
+                foreach (PropertyInfo property in entity.GetType().GetProperties())
+                {
+                    if (property.Name != entity.GetType().GetProperties()[0].Name)
+                    {
+                        if (!oldEntity.GetType().GetProperty(property.Name).GetValue(oldEntity, null).Equals(property.GetValue(entity, null)))
+                        {
+                            if ((int)temp.GetType().GetProperties()[0].GetValue(temp, null) == -1) temp = Activator.CreateInstance<T>();
+                            temp.GetType().GetProperty(property.Name).SetValue(temp, property.GetValue(entity, null), null);
+                        }
+                    }
+                }
+                if ((int)temp.GetType().GetProperties()[0].GetValue(temp, null) != -1) station.ChangeEntity<T>(oldEntity, temp);
+            }
         }
 
         #region PropertyChanged
@@ -57,28 +93,73 @@ namespace CourseWork_BusStation_WPF.ViewModel
                 {
                     case "Flight":
                         {
-                            station.RemoveEntity<Flight>(SelectedFlight);
-                            Flights = UpdateEntities<Flight>();
+                            if (SelectedFlight != null)
+                            {
+                                station.RemoveEntity<Flight>(SelectedFlight);
+                                UpdateCollection<Flight>(_flights);
+                                UpdatePropertyChanged("Flights");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не выбрана ни одна запись!", "!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
                         }; break;
                     case "Passenger":
                         {
-                            station.RemoveEntity<Passenger>(SelectedPassenger);
-                            Passengers = UpdateEntities<Passenger>();
+                            if (SelectedPassenger != null)
+                            {
+                                station.RemoveEntity<Passenger>(SelectedPassenger);
+                                UpdateCollection<Passenger>(_passengers);
+                                UpdatePropertyChanged("Passengers");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не выбрана ни одна запись!", "!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
                         }; break;
                     case "Bus":
                         {
-                            station.RemoveEntity<Bus>(SelectedBus);
-                            Buses = UpdateEntities<Bus>();
+                            if (SelectedBus != null)
+                            {
+                                station.RemoveEntity<Bus>(SelectedBus);
+                                UpdateCollection<Bus>(_buses);
+                                UpdatePropertyChanged("Buses");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не выбрана ни одна запись!", "!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
                         }; break;
                     case "Driver":
                         {
-                            station.RemoveEntity<Driver>(SelectedDriver);
-                            Drivers = UpdateEntities<Driver>();
+                            if (SelectedDriver != null)
+                            {
+                                station.RemoveEntity<Driver>(SelectedDriver);
+                                UpdateCollection<Driver>(_drivers);
+                                UpdatePropertyChanged("Drivers");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не выбрана ни одна запись!", "!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
                         }; break;
                     case "Ticket":
                         {
-                            station.RemoveEntity<Ticket>(SelectedTicket);
-                            Tickets = UpdateEntities<Ticket>();
+                            if (SelectedTicket != null)
+                            {
+                                station.RemoveEntity<Ticket>(SelectedTicket);
+                                UpdateCollection<Driver>(_drivers);
+                                UpdatePropertyChanged("Drivers");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Не выбрана ни одна запись!", "!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
                         }; break;
                 }
             }
@@ -86,7 +167,29 @@ namespace CourseWork_BusStation_WPF.ViewModel
         public ICommand ApplyChangesCommand { get; set; }
         void ApplyChanges()
         {
-
+            switch (SelectedTab.Name)
+            {
+                case "Flight":
+                    {
+                        ChangesAdding<Flight>(_flights);
+                    }; break;
+                case "Passenger":
+                    {
+                        ChangesAdding<Passenger>(_passengers);
+                    }; break;
+                case "Bus":
+                    {
+                        ChangesAdding<Bus>(_buses);
+                    }; break;
+                case "Driver":
+                    {
+                        ChangesAdding<Driver>(_drivers);
+                    }; break;
+                case "Ticket":
+                    {
+                        ChangesAdding<Ticket>(_tickets);
+                    }; break;
+            }
         }
         #endregion
 
@@ -102,63 +205,33 @@ namespace CourseWork_BusStation_WPF.ViewModel
             set
             {
                 _selectedTab = value;
-                _flights = new ObservableCollection<Flight>(station.GetEntities<Flight>());
-                _tickets = new ObservableCollection<Ticket>(station.GetEntities<Ticket>());
-                _buses = new ObservableCollection<Bus>(station.GetEntities<Bus>());
-                _drivers = new ObservableCollection<Driver>(station.GetEntities<Driver>());
-                _passengers = new ObservableCollection<Passenger>(station.GetEntities<Passenger>());
             }
         }
 
-        ObservableCollection<Flight> _flights = new ObservableCollection<Flight>();
+        ObservableCollection<Flight> _flights;
         public ObservableCollection<Flight> Flights
         {
             get { return _flights; }
-            set
-            {
-                _flights = value;
-                UpdatePropertyChanged("Flights");
-            }
         }
         ObservableCollection<Ticket> _tickets = new ObservableCollection<Ticket>();
         public ObservableCollection<Ticket> Tickets
         {
             get { return _tickets; }
-            set
-            {
-                _tickets = value;
-                UpdatePropertyChanged("Tickets");
-            }
         }
         ObservableCollection<Bus> _buses = new ObservableCollection<Bus>();
         public ObservableCollection<Bus> Buses
         {
             get { return _buses; }
-            set
-            {
-                _buses = value;
-                UpdatePropertyChanged("Buses");
-            }
         }
         ObservableCollection<Driver> _drivers = new ObservableCollection<Driver>();
         public ObservableCollection<Driver> Drivers
         {
             get { return _drivers; }
-            set
-            {
-                _drivers = value;
-                UpdatePropertyChanged("Drivers");
-            }
         }
         ObservableCollection<Passenger> _passengers = new ObservableCollection<Passenger>();
         public ObservableCollection<Passenger> Passengers
         {
             get { return _passengers; }
-            set
-            {
-                _passengers = value;
-                UpdatePropertyChanged("Passengers");
-            }
         }
 
         Flight _selectedFlight;

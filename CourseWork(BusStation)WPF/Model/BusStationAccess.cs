@@ -79,6 +79,13 @@ namespace CourseWork_BusStation_WPF.Model
             DataRow row = new DataTable().NewRow();
             foreach (PropertyInfo property in entity.GetType().GetProperties())
             {
+                switch (property.PropertyType.ToString())
+                {
+                    case "System.String": if ((string)property.GetValue(entity, null) == null) property.SetValue(entity, "", null); break;
+                    case "System.TimeSpan": if ((TimeSpan)property.GetValue(entity, null) == null) property.SetValue(entity, new TimeSpan(), null); break;
+                    case "System.DateTime": if ((DateTime)property.GetValue(entity, null) == null) property.SetValue(entity, new DateTime(), null); break;
+                }
+                
                 row.Table.Columns.Add(new DataColumn(property.Name, property.PropertyType));
                 row[property.Name] = property.GetValue(entity, null);
             }
@@ -116,6 +123,7 @@ namespace CourseWork_BusStation_WPF.Model
                 }
                 changes.Add(property.Name, property.GetValue(newEntity, null));
             }
+            if (changes.Count == 0) changes.Add("Available_Tickets_Amount", 0);
             database.SendQuery(MySqlQueryConstructor.UpdateQuery(oldEntity.GetType().Name,
                 MySqlQueryConstructor.SetQuery(changes)) +
                 MySqlQueryConstructor.WhereQuery(MySqlQueryConstructor.SimpleCondition(oldEntity.GetType().GetProperties()[0].Name,

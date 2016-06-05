@@ -9,7 +9,18 @@
     
     <Grid>
         <Button Content="Вернуться в главное меню" Margin="12,12,675,0" Name="BackToMainMenuButton" MinWidth="160" Command="{Binding Path=BackToMainMenuCommand}" Height="27" VerticalAlignment="Top" />
-        <DataGrid AutoGenerateColumns="True" Margin="12,149,12,0" Name="FlightGrid" ItemsSource="{Binding Path=FlightsTable,Mode=TwoWay}" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" SelectedIndex="{Binding Path=SelectedIndex,Mode=OneWayToSource}" Height="194" VerticalAlignment="Top"/>
+        <DataGrid AutoGenerateColumns="False" Margin="12,149,0,0" Name="FlightGrid" ItemsSource="{Binding Path=Flights}" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" SelectedIndex="{Binding Path=SelectedIndex,Mode=OneWayToSource}" Height="194" VerticalAlignment="Top" HorizontalAlignment="Left" Width="922" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Доступно билетов" Binding="{Binding Available_Tickets_Amount}"/>
+                <DataGridTextColumn Header="Время отправления" Binding="{Binding Departure_time}"/>
+                <DataGridTextColumn Header="Время прибытия" Binding="{Binding Arrival_time}"/>
+                <DataGridTextColumn Header="Место отправления" Binding="{Binding Departure_place}"/>
+                <DataGridTextColumn Header="Место прибытия" Binding="{Binding Arrival_Place}"/>
+                <DataGridTextColumn Header="Промежуточные остановки" Binding="{Binding Intermediate_stops}"/>
+                <DataGridTextColumn Header="Дата отправления" Binding="{Binding Departure_date}"/>
+                <DataGridTextColumn Header="Дата прибытия" Binding="{Binding Arrival_date}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <ListBox Height="75" HorizontalAlignment="Left" Margin="81,68,0,0" Name="Departure_PlacesListBox" VerticalAlignment="Top" Width="163" ItemsSource="{Binding Path=Departure_PlacesList, Mode=TwoWay}" SelectedItem="{Binding Path=Departure_Place,Mode=TwoWay}" />
         <Label Content="Рейсы из " Height="28" HorizontalAlignment="Left" Margin="12,102,0,0" Name="Departure_PlaceLabel" VerticalAlignment="Top" />
         <ListBox Height="75" Margin="327,68,0,0" Name="Arrival_PlacesListBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="153" ItemsSource="{Binding Path=Arrival_PlacesList, Mode=TwoWay}" SelectedItem="{Binding Path=Arrival_Place,Mode=TwoWay}"/>

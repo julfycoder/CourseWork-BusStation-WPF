@@ -12,27 +12,64 @@
         <TabControl Height="304" Margin="24,54,12,0" Name="tabControl1" VerticalAlignment="Top" SelectedItem="{Binding Path=SelectedTab,Mode=TwoWay}">
             <TabItem Header="Рейсы" Name="Flight">
                 <Grid>
-                    <DataGrid AutoGenerateColumns="True" Height="268" Margin="6,6,6,0" Name="FlightGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Flights}" SelectedItem="{Binding Path=SelectedFlight}"/>
+                    <DataGrid AutoGenerateColumns="False" Height="268" Margin="6,6,6,0" Name="FlightGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Flights}" SelectedItem="{Binding Path=SelectedFlight}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Доступно билетов" Binding="{Binding Available_Tickets_Amount}"/>
+                            <DataGridTextColumn Header="Время отправления" Binding="{Binding Departure_time}"/>
+                            <DataGridTextColumn Header="Время прибытия" Binding="{Binding Arrival_time}"/>
+                            <DataGridTextColumn Header="Место отправления" Binding="{Binding Departure_place}"/>
+                            <DataGridTextColumn Header="Место прибытия" Binding="{Binding Arrival_Place}"/>
+                            <DataGridTextColumn Header="Промежуточные остановки" Binding="{Binding Intermediate_stops}"/>
+                            <DataGridTextColumn Header="Дата отправления" Binding="{Binding Departure_date}"/>
+                            <DataGridTextColumn Header="Дата прибытия" Binding="{Binding Arrival_date}"/>
+                            <DataGridTextColumn Header="id Автобуса" Binding="{Binding idBus}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Пассажиры" Name="Passenger">
                 <Grid>
-                    <DataGrid AutoGenerateColumns="True" Height="268" Margin="6,6,6,0" Name="PassengerGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Passengers}" SelectedItem="{Binding Path=SelectedPassenger}"/>
+                    <DataGrid AutoGenerateColumns="False" Height="268" Margin="6,6,6,0" Name="PassengerGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Passengers}" SelectedItem="{Binding Path=SelectedPassenger}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"/>
+                            <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}"/>
+                            <DataGridTextColumn Header="Национальность" Binding="{Binding Nationality}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Билеты" Name="Ticket">
                 <Grid>
-                    <DataGrid AutoGenerateColumns="True" Height="268" Margin="6,6,6,0" Name="TicketGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Tickets}" SelectedItem="{Binding Path=SelectedTicket}"/>
+                    <DataGrid AutoGenerateColumns="False" Height="268" Margin="6,6,6,0" Name="TicketGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Tickets}" SelectedItem="{Binding Path=SelectedTicket}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Стоимость" Binding="{Binding Cost}"/>
+                            <DataGridTextColumn Header="Дата покупки" Binding="{Binding Purchase_date}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Автобусы" Name="Bus">
                 <Grid>
-                    <DataGrid AutoGenerateColumns="True" Height="268" Margin="6,6,6,0" Name="BusGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Buses}" SelectedItem="{Binding Path=SelectedBus}"/>
+                    <DataGrid AutoGenerateColumns="False" Height="268" Margin="6,6,6,0" Name="BusGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Buses}" SelectedItem="{Binding Path=SelectedBus}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Компания" Binding="{Binding Company}"/>
+                            <DataGridTextColumn Header="Модель" Binding="{Binding Model}"/>
+                            <DataGridTextColumn Header="Количество пассажиров" Binding="{Binding Passengers}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Водители" Name="Driver">
                 <Grid>
-                    <DataGrid AutoGenerateColumns="True" Height="268" Margin="6,6,6,0" Name="DriverGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Drivers}" SelectedItem="{Binding Path=SelectedDriver}"/>
+                    <DataGrid AutoGenerateColumns="False" Height="268" Margin="6,6,6,0" Name="DriverGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Drivers}" SelectedItem="{Binding Path=SelectedDriver}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"/>
+                            <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}"/>
+                            <DataGridTextColumn Header="Зарплата" Binding="{Binding Wage}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>

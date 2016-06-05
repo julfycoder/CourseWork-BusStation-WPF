@@ -29,6 +29,7 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
                     case "System.String": queryString += "'" + row[column].ToString() + "'"; break;
                     case "System.Int32": queryString += row[column].ToString(); break;
                     case "System.DateTime": queryString += "'" + ((DateTime)row[column]).Year.ToString() + "-" + ((DateTime)row[column]).Month.ToString() + "-" + ((DateTime)row[column]).Day.ToString() + "'"; break;
+                    case "System.TimeSpan": queryString += "'" + row[column] + "'"; break;
                 }
                 if (column != row.Table.Columns[row.Table.Columns.Count - 1]) queryString += ", ";
                 else queryString += ")";
@@ -65,22 +66,20 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
             return query += " FROM " + table;
         }
 
-        public static string SetQuery(params Dictionary<string, object>[] changes)
+        public static string SetQuery(Dictionary<string, object> changes)
         {
             string query = "SET ";
-            foreach (Dictionary<string, object> change in changes)
+            foreach (string key in changes.Keys)
             {
-                foreach (string key in change.Keys)
+                query += key + " = ";
+                switch (changes[key].GetType().ToString())
                 {
-                    query += key + " = ";
-                    switch (change[key].GetType().ToString())
-                    {
-                        case "System.String": query += "'" + change[key] + "'"; break;
-                        case "System.Int32": query += change[key].ToString(); break;
-                        case "System.DateTime": query += "'" + ((DateTime)change[key]).Year.ToString() + "-" + ((DateTime)change[key]).Month.ToString() + "-" + ((DateTime)change[key]).Day.ToString() + "'"; break;
-                    }
-                    if (change != changes[changes.Length - 1]) query += ", ";
+                    case "System.String": query += "'" + changes[key] + "'"; break;
+                    case "System.Int32": query += changes[key].ToString(); break;
+                    case "System.DateTime": query += "'" + ((DateTime)changes[key]).Year.ToString() + "-" + ((DateTime)changes[key]).Month.ToString() + "-" + ((DateTime)changes[key]).Day.ToString() + "'"; break;
+                    case "System.TimeSpan": query += "'" + changes[key] + "'"; break;
                 }
+                if (key != changes.Keys.Last<string>()) query += ", ";
             }
             return query;
         }
@@ -116,6 +115,7 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
                 case "System.String": condition += "'" + value + "'"; break;
                 case "System.Int32": condition += value; break;
                 case "System.DateTime": condition += "'" + ((DateTime)value).Year.ToString() + "-" + ((DateTime)value).Month.ToString() + "-" + ((DateTime)value).Day.ToString() + "'"; break;
+                case "System.TimeSpan": condition += "'" + value + "'"; break;
                 default: condition += value.ToString(); break;
             }
             return condition;
