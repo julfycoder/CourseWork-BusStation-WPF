@@ -18,5 +18,6 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="297,227,0,0" Name="NationalityTextBox" VerticalAlignment="Top" Width="120" Text="{Binding Path=PassengerNationality,Mode=OneWayToSource}"/>
         <Button Content="Бронировать" HorizontalAlignment="Left" Margin="375,292,0,25" Name="ReservationButton" Width="104" Command="{Binding Path=ApplyReservationCommand}"/>
         <Button Content="Вернуться к рейсам" Height="23" Margin="68,26,429,0" Name="BackToFlightPreviewButton" VerticalAlignment="Top" Command="{Binding Path=BackToFlightPreviewCommand}"/>
+        <Label Content="{Binding Path=FlightDuration}" Height="28" HorizontalAlignment="Left" Margin="70,282,0,0" Name="duratoinLabel" VerticalAlignment="Top" />
     </Grid>
 </Page>

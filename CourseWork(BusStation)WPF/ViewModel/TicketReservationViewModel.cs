@@ -47,12 +47,24 @@ namespace CourseWork_BusStation_WPF.ViewModel
         public ICommand ApplyReservationCommand { get; set; }
         void ApplyReservation()
         {
-            if ((PassengerSurname != null && PassengerSurname != "") && (PassengerName != null && PassengerName != "") && (PassengerPatronymic != null && PassengerPatronymic != "") && (PassengerNationality != null && PassengerNationality != ""))
+            List<Passenger> passengers = station.GetEntities<Passenger>();
+            if ((PassengerSurname != null && PassengerSurname != "" && PassengerSurname.Substring(0, 1) != " ") &&
+                (PassengerName != null && PassengerName != "" && PassengerName.Substring(0, 1) != " ") &&
+                (PassengerPatronymic != null && PassengerPatronymic != "" && PassengerPatronymic.Substring(0, 1) != " ") &&
+                (PassengerNationality != null && PassengerNationality != "" && PassengerNationality.Substring(0, 1) != " "))
             {
+                foreach (Passenger passenger in passengers)
+                {
+                    if (passenger.Surname == PassengerSurname && passenger.Name == PassengerName && passenger.Patronymic == PassengerPatronymic && passenger.Nationality == PassengerNationality)
+                    {
+                        MessageBox.Show("Допускается покупка лишь одного билета на рейс для одного пассажира!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
                 ReserveTicket();
                 BackToFlightPreview();
             }
-            else MessageBox.Show("Все поля должны быть заполнены!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else MessageBox.Show("Все поля должны быть заполнены\n и данные в полях не должны начинаться на пробел!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         void ReserveTicket()
         {
@@ -71,7 +83,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
                 idBus = flight.idBus,
                 Cost = 55,
                 idPassenger = station.GetEntitiesByPrototype<Passenger>(passenger)[0].idPassenger,
-                Purchase_date = DateTime.Now,
+                Purchase_date = DateTime.Now.ToString(),
             };
 
             station.AddEntity<Ticket>(ticket);
@@ -102,7 +114,23 @@ namespace CourseWork_BusStation_WPF.ViewModel
             get;
             set;
         }
-
+        public string FlightDuration
+        {
+            get
+            {
+                TimeSpan time = station.GetTimeDuration(flight.idFlight);
+                int hours = time.Days * 24 + time.Hours;
+                string h = "";
+                switch (hours.ToString().Substring(hours.ToString().Length - 1, 1))
+                {
+                    case "1": h = "час"; break;
+                    case "3":
+                    case "4": h = "часа"; break;
+                    default: h = "часов"; break;
+                }
+                return "Продолжительность поездки " + hours.ToString() + " " + h;
+            }
+        }
         #endregion
     }
 }

@@ -18,6 +18,11 @@ namespace CourseWork_BusStation_WPF.Model.BusStationEntity
             string propName = propertyName;
             PropertyInfo property = entity.GetType().GetProperty(propertyName);
             if (value == DBNull.Value) value = null;
+            switch (value.GetType().ToString())
+            {
+                case "System.TimeSpan": value=value.ToString(); break;
+                case "System.DateTime": value = value.ToString(); break;
+            }
             property.SetValue(entity, value, null);
         }
         public object BuildEntity() { return entity; }

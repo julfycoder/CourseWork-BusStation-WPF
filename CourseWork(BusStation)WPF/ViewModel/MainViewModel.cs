@@ -11,6 +11,7 @@ using CourseWork_BusStation_WPF.Model.AuthentificationEntity;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows;
+using System.Security.Cryptography;
 
 namespace CourseWork_BusStation_WPF.ViewModel
 {
@@ -26,7 +27,14 @@ namespace CourseWork_BusStation_WPF.ViewModel
             RegistrationCommand = new Command(arg => Registration());
             station = new BusStationAccess();
         }
-
+        string GetMD5Hash(string input)
+        {
+            MD5 md = new MD5CryptoServiceProvider();
+            byte[] data = md.ComputeHash(Encoding.Default.GetBytes(input));
+            StringBuilder sBuilder = new StringBuilder();
+            for (int i = 0; i < data.Length; i++) sBuilder.Append(data[i]);
+            return sBuilder.ToString();
+        }
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         void UpdatePropertyChanged(string propertyName)
@@ -48,7 +56,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
 
             foreach (Administrator admin in admins)
             {
-                if (Password == admin.Password && Login == admin.Login)
+                if (GetMD5Hash(Password) == admin.Password && Login == admin.Login)
                 {
                     currentPage.NavigationService.Navigate(new AdminConsolePage());
                     return;

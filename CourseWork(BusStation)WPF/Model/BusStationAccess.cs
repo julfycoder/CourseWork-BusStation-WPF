@@ -131,6 +131,12 @@ namespace CourseWork_BusStation_WPF.Model
                 oldEntity.GetType().GetProperties()[0].GetValue(oldEntity, null))));
         }
 
+        public TimeSpan GetTimeDuration(int id)
+        {
+            DataTable table = database.GetData(MySqlQueryConstructor.DurationTime(id));
+            return TimeSpan.Parse(table.Rows[0][table.Columns[0].ColumnName].ToString());
+        }
+
         #endregion
 
     }

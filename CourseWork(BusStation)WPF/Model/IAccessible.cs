@@ -15,5 +15,6 @@ namespace CourseWork_BusStation_WPF.Model
         void AddEntity<T>(T entity);
         void RemoveEntity<T>(T entity);
         void ChangeEntity<T>(T oldEntity, T newEntity);
+        TimeSpan GetTimeDuration(int id);
     }
 }

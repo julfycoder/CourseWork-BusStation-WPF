@@ -47,7 +47,6 @@ namespace CourseWork_BusStation_WPF.ViewModel
                 {
                     station.AddEntity<T>(collection[oldEntities.Count + i]);
                 }
-                return;
             }
             foreach (T entity in collection)
             {
@@ -58,7 +57,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
                 {
                     if (property.Name != entity.GetType().GetProperties()[0].Name)
                     {
-                        if (!oldEntity.GetType().GetProperty(property.Name).GetValue(oldEntity, null).Equals(property.GetValue(entity, null)))
+                        if (oldEntity != null && !oldEntity.GetType().GetProperty(property.Name).GetValue(oldEntity, null).Equals(property.GetValue(entity, null)))
                         {
                             if ((int)temp.GetType().GetProperties()[0].GetValue(temp, null) == -1) temp = Activator.CreateInstance<T>();
                             temp.GetType().GetProperty(property.Name).SetValue(temp, property.GetValue(entity, null), null);
@@ -86,7 +85,18 @@ namespace CourseWork_BusStation_WPF.ViewModel
         public ICommand DeleteRowCommand { get; set; }
         void DeleteRow()
         {
+            Type[] types = new Type[] { typeof(Flight), typeof(Bus), typeof(Passenger), typeof(Ticket), typeof(Driver) };
             MessageBoxResult result = MessageBox.Show("Вы действительно хотите удалить эту запись?", "?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                for (int i = 0; i < types.Length; i++)
+                {
+                    if (SelectedTab.Name == types[i].Name)
+                    {
+ 
+                    }
+                }
+            }
             if (result == MessageBoxResult.Yes)
             {
                 switch (SelectedTab.Name)
@@ -153,7 +163,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
                             {
                                 station.RemoveEntity<Ticket>(SelectedTicket);
                                 UpdateCollection<Driver>(_drivers);
-                                UpdatePropertyChanged("Drivers");
+                                UpdatePropertyChanged("Tickets");
                             }
                             else
                             {
@@ -205,6 +215,11 @@ namespace CourseWork_BusStation_WPF.ViewModel
             set
             {
                 _selectedTab = value;
+                UpdateCollection<Flight>(_flights);
+                UpdateCollection<Bus>(_buses);
+                UpdateCollection<Driver>(_drivers);
+                UpdateCollection<Passenger>(_passengers);
+                UpdateCollection<Ticket>(_tickets);
             }
         }
 

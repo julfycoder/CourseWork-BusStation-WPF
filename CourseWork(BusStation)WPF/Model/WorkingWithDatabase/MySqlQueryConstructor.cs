@@ -163,5 +163,10 @@ namespace CourseWork_BusStation_WPF.Model.WorkingWithDatabase
             if (isNULL) return column + " IS NULL";
             return column + " IS NOT NULL";
         }
+
+        public static string DurationTime(int id)
+        {
+            return "select TimeFunction23(" + id + ")";
+        }
     }
 }

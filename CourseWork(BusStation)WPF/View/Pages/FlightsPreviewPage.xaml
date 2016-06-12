@@ -17,7 +17,7 @@
                 <DataGridTextColumn Header="Место отправления" Binding="{Binding Departure_place}"/>
                 <DataGridTextColumn Header="Место прибытия" Binding="{Binding Arrival_Place}"/>
                 <DataGridTextColumn Header="Промежуточные остановки" Binding="{Binding Intermediate_stops}"/>
-                <DataGridTextColumn Header="Дата отправления" Binding="{Binding Departure_date}"/>
+                <DataGridTextColumn Header="Дата отправления" Binding="{Binding Departure_date}" />
                 <DataGridTextColumn Header="Дата прибытия" Binding="{Binding Arrival_date}"/>
             </DataGrid.Columns>
         </DataGrid>

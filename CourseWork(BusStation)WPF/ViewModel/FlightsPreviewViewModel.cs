@@ -82,8 +82,12 @@ namespace CourseWork_BusStation_WPF.ViewModel
             if (SelectedIndex != -1)
             {
                 Flight flight = Flights[SelectedIndex];
-                if (flight.Available_Tickets_Amount > 0) currentPage.NavigationService.Navigate(new TicketReservationPage(flight));
-                else MessageBox.Show("К сожалению на данный рейс были проданы все билеты.", "Сожаление", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (DateTime.Parse(flight.Departure_date) >= DateTime.Now)
+                {
+                    if (flight.Available_Tickets_Amount > 0) currentPage.NavigationService.Navigate(new TicketReservationPage(flight));
+                    else MessageBox.Show("К сожалению на данный рейс были проданы все билеты.", "Сожаление", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else MessageBox.Show("Бронирование билетов, на уже начавшиеся либо завершившиеся рейсы невозможно!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else MessageBox.Show("Не выбран ни один рейс!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
@@ -91,32 +95,31 @@ namespace CourseWork_BusStation_WPF.ViewModel
         void ApplyFiltres()
         {
             Flight flight = new Flight();
-            List<string> conditions = new List<string>();
-            int count = 0;
-            if (Departure_Place != null && Departure_Place != Departure_PlacesList[0])
+            bool emptyFields = true;
+            if (Departure_Place != null && Departure_Place != Departure_PlacesList[0] && Departure_Place != "")
             {
                 flight.Departure_place = Departure_Place;
-                count++;
+                emptyFields = false;
             }
-            if (Arrival_Place != null && Arrival_Place != Arrival_PlacesList[0])
+            if (Arrival_Place != null && Arrival_Place != Arrival_PlacesList[0] && Arrival_Place != "")
             {
                 flight.Arrival_Place = Arrival_Place;
-                count++;
+                emptyFields = false;
             }
-            if (Departure_date != null && (Departure_date.Year != 1))
+            if (Departure_date != null && Departure_date != "")
             {
                 flight.Departure_date = Departure_date;
-                count++;
+                emptyFields = false;
             }
-            if (count > 0) Flights = new ObservableCollection<Flight>(station.GetEntitiesByPrototype<Flight>(flight));
+            if (!emptyFields) Flights = new ObservableCollection<Flight>(station.GetEntitiesByPrototype<Flight>(flight));
             else Flights = new ObservableCollection<Flight>(station.GetEntities<Flight>());
         }
         public ICommand ResetFiltresCommand { get; set; }
         void ResetFiltres()
         {
-            Departure_Place = "Place";
-            Arrival_Place = "Place";
-            Departure_date = new DateTime();
+            Departure_Place = "Город";
+            Arrival_Place = "Город";
+            Departure_date = null;
             BusInformation = "";
             DriverInformation = "";
             ApplyFiltres();
@@ -132,7 +135,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             get
             {
                 _departure_placesList = new ObservableCollection<string>();
-                _departure_placesList.Add("Place");
+                _departure_placesList.Add("Город");
                 foreach (Flight flight in Flights) _departure_placesList.Add(flight.Departure_place);
                 return _departure_placesList;
             }
@@ -147,7 +150,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             get
             {
                 _arrival_placeslList = new ObservableCollection<string>();
-                _arrival_placeslList.Add("Place");
+                _arrival_placeslList.Add("Город");
                 foreach (Flight flight in Flights) _arrival_placeslList.Add(flight.Arrival_Place);
                 return _arrival_placeslList;
             }
@@ -188,7 +191,7 @@ namespace CourseWork_BusStation_WPF.ViewModel
             }
         }
 
-        public DateTime Departure_date
+        public string Departure_date
         {
             get;
             set;
